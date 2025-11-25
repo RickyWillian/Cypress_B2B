@@ -1,0 +1,35 @@
+name: Cypress CI - Executar Testes E2E
+
+# Aciona o workflow em push (envio de código) e pull requests (solicitação de merge)
+on:
+  push:
+    branches: [ main ] # Roda em push para a branch 'main'
+  pull_request:
+    branches: [ main ] # Roda em pull request para a branch 'main'
+
+
+jobs:
+  cypress-run:
+    # O ambiente de execução será o Ubuntu mais recente
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Checkout: Clona o código do seu repositório para o runner
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      # 2. Setup Node: Configura o ambiente Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # Versão LTS recomendada
+          
+      # 3. Instalar Dependências e Rodar Testes
+      # Usa a ação oficial do Cypress, que cuida de instalar e rodar
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          # O comando padrão é 'cypress run', que roda todos os seus specs
+          # Rodamos explicitamente no Chrome e no modo headless
+          command: npm install && npx cypress run --browser chrome
+          
